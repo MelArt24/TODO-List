@@ -1,0 +1,28 @@
+# Ignore IntelliJ IDEA / Android Studio specific files
+.idea/
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore build and output directories
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+# Ignore local properties and secrets
+local.properties
+*.env
+
+# Ignore Gradle wrapper files that should not be tracked
+gradle-wrapper.jar
