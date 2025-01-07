@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -11,19 +12,37 @@ import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
+import android.content.res.Configuration
+import androidx.appcompat.app.AppCompatDelegate
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var todoAdapter: TodoAdapter
+    private lateinit var switchThemeButton: Button
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        switchThemeButton = findViewById(R.id.switchThemeButton)
+
+        // Updating a theme using SharedPreferences
+        val sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE)
+        val nightMode = sharedPreferences.getBoolean("night_mode", false)
+        if (nightMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            switchThemeButton.text = "Light"
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            switchThemeButton.text = "Dark"
+        }
+
         todoAdapter = TodoAdapter(mutableListOf())
 
         // Restoring data from SharedPreferences
-        val sharedPreferences = getSharedPreferences("todo_preferences", Context.MODE_PRIVATE)
-        val json = sharedPreferences.getString("todo_list", null)
+        val sharedPreferencesData = getSharedPreferences("todo_preferences", Context.MODE_PRIVATE)
+        val json = sharedPreferencesData.getString("todo_list", null)
         if (json != null) {
             val gson = Gson()
             val type = object : TypeToken<List<Todo>>() {}.type
@@ -45,9 +64,33 @@ class MainActivity : AppCompatActivity() {
                 etTODOTitle.text.clear()
             }
         }
+
         val deleteButton = findViewById<Button>(R.id.bDeleteDoneTODOs)
         deleteButton.setOnClickListener {
             todoAdapter.deleteDoneTodos()
+        }
+
+//        val switchThemeButton = findViewById<Button>(R.id.switchThemeButton)
+        switchThemeButton.setOnClickListener {
+            val currentMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            if (currentMode == Configuration.UI_MODE_NIGHT_YES) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                switchThemeButton.text = "Dark"
+                saveNightModePreference(false)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                switchThemeButton.text = "Light"
+                saveNightModePreference(true)
+            }
+        }
+    }
+
+    // Зберігаємо вибір теми в SharedPreferences
+    private fun saveNightModePreference(isNightMode: Boolean) {
+        val sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putBoolean("night_mode", isNightMode)
+            apply()
         }
     }
 
@@ -70,8 +113,8 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
         val gson = Gson()
         val json = gson.toJson(todoAdapter.getTodos()) // Converting a list to JSON
-        val sharedPreferences = getSharedPreferences("todo_preferences", Context.MODE_PRIVATE)
-        with(sharedPreferences.edit()) {
+        val sharedPreferencesData = getSharedPreferences("todo_preferences", Context.MODE_PRIVATE)
+        with(sharedPreferencesData.edit()) {
             putString("todo_list", json) // Save JSON in SharedPreferences
             apply()
         }
