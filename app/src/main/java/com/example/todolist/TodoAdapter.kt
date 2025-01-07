@@ -1,5 +1,6 @@
 package com.example.todolist
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,15 +9,23 @@ import android.widget.TextView
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import androidx.recyclerview.widget.RecyclerView
 
+// TodoAdapter gets a list of tasks (todos) and inherits from
+// RecyclerView.Adapter, which provides the connection between
+// the data and the list
+
 class TodoAdapter(
     private val todos: MutableList<Todo>
 ) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
+    // TodoViewHolder describes the view of a single list item
     class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTodoTitle: TextView = itemView.findViewById(R.id.tvTodoTitle)
         val cbDone: CheckBox = itemView.findViewById(R.id.cbDone)
     }
 
+    // The method creates new views for the list, but this only happens
+    // when a new view is needed. If the RecyclerView can recycle
+    // existing views, onCreateViewHolder() is not called
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         return TodoViewHolder(
             LayoutInflater.from(parent.context).inflate(
@@ -27,11 +36,15 @@ class TodoAdapter(
         )
     }
 
+    // Adds tasks to the todos list
     fun addTodo(todo: Todo) {
         todos.add(todo)
         notifyItemInserted(todos.size - 1)
     }
 
+    // Removes all items from the list where isChecked == true
+    // notifyDataSetChanged updates the entire list
+    @SuppressLint("NotifyDataSetChanged")
     fun deleteDoneTodos() {
         todos.removeAll { todo ->
             todo.isChecked
@@ -39,6 +52,7 @@ class TodoAdapter(
         notifyDataSetChanged()
     }
 
+    // Adds or removes strikethrough text from the task name
     private fun toggleStrikeThrough(tvTodoTitle: TextView, isChecked: Boolean) {
         if(isChecked) {
             tvTodoTitle.paintFlags = tvTodoTitle.paintFlags or STRIKE_THRU_TEXT_FLAG
@@ -47,6 +61,7 @@ class TodoAdapter(
         }
     }
 
+    // Data binding to the element
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val currentTodo = todos[position]
         holder.apply {
@@ -60,6 +75,7 @@ class TodoAdapter(
         }
     }
 
+    // Returns the number of tasks in the list
     override fun getItemCount(): Int {
         return todos.size
     }
