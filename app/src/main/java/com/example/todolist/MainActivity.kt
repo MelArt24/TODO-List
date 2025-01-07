@@ -36,4 +36,20 @@ class MainActivity : AppCompatActivity() {
             todoAdapter.deleteDoneTodos()
         }
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Saving a task list
+        outState.putParcelableArrayList("todo_list", ArrayList(todoAdapter.getTodos()))
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        // Restoring the task list
+        val savedTodos = savedInstanceState.getParcelableArrayList<Todo>("todo_list")
+        if (savedTodos != null) {
+            todoAdapter.setTodos(savedTodos)
+        }
+    }
+
 }

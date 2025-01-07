@@ -79,4 +79,18 @@ class TodoAdapter(
     override fun getItemCount(): Int {
         return todos.size
     }
+
+    // getting a list of tasks
+    fun getTodos(): List<Todo> {
+        return todos
+    }
+
+    // setting a list of tasks
+    @SuppressLint("NotifyDataSetChanged")
+    fun setTodos(newTodos: List<Todo>) {
+        todos.clear()
+        todos.addAll(newTodos)
+        notifyDataSetChanged()
+    }
+
 }
