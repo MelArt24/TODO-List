@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity() {
             todoAdapter.deleteDoneTodos()
         }
 
-//        val switchThemeButton = findViewById<Button>(R.id.switchThemeButton)
         switchThemeButton.setOnClickListener {
             val currentMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             if (currentMode == Configuration.UI_MODE_NIGHT_YES) {
@@ -85,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Зберігаємо вибір теми в SharedPreferences
+    // Save theme selection in SharedPreferences
     private fun saveNightModePreference(isNightMode: Boolean) {
         val sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE)
         with(sharedPreferences.edit()) {
