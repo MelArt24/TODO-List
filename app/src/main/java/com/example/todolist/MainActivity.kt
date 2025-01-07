@@ -7,6 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
+import android.content.Context
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var todoAdapter: TodoAdapter
@@ -16,6 +20,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         todoAdapter = TodoAdapter(mutableListOf())
+
+        // Restoring data from SharedPreferences
+        val sharedPreferences = getSharedPreferences("todo_preferences", Context.MODE_PRIVATE)
+        val json = sharedPreferences.getString("todo_list", null)
+        if (json != null) {
+            val gson = Gson()
+            val type = object : TypeToken<List<Todo>>() {}.type
+            val savedTodos: List<Todo> = gson.fromJson(json, type)
+            todoAdapter.setTodos(savedTodos) // We install the list into the adapter
+        }
 
         val rvTODOItems = findViewById<RecyclerView>(R.id.rvTODOItems)
         rvTODOItems.adapter = todoAdapter
@@ -52,4 +66,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        val gson = Gson()
+        val json = gson.toJson(todoAdapter.getTodos()) // Converting a list to JSON
+        val sharedPreferences = getSharedPreferences("todo_preferences", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putString("todo_list", json) // Save JSON in SharedPreferences
+            apply()
+        }
+    }
 }
