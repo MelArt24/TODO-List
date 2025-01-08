@@ -109,6 +109,7 @@ class TodoAdapter(
         notifyDataSetChanged()
     }
 
+    // The method is responsible for changing the order of items in the list after dragging
     fun onItemMove(fromPosition: Int, toPosition: Int) {
         if (fromPosition != toPosition) {
             val item = todos.removeAt(fromPosition)
