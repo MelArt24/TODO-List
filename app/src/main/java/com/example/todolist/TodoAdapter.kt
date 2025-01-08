@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 // TodoAdapter gets a list of tasks (todos) and inherits from
@@ -21,6 +22,7 @@ class TodoAdapter(
     class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTodoTitle: TextView = itemView.findViewById(R.id.tvTodoTitle)
         val cbDone: CheckBox = itemView.findViewById(R.id.cbDone)
+        val tvPriorityIndicator: TextView = itemView.findViewById(R.id.tvPriorityIndicator)
     }
 
     // The method creates new views for the list, but this only happens
@@ -61,6 +63,15 @@ class TodoAdapter(
         }
     }
 
+    private fun getPriorityColor(priority: String?, itemView: View): Int {
+        return when (priority) {
+            "High" -> ContextCompat.getColor(itemView.context, R.color.priority_high)
+            "Medium" -> ContextCompat.getColor(itemView.context, R.color.priority_medium)
+            "Low" -> ContextCompat.getColor(itemView.context, R.color.priority_low)
+            else -> ContextCompat.getColor(itemView.context, R.color.priority_default)
+        }
+    }
+
     // Data binding to the element
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val currentTodo = todos[position]
@@ -68,6 +79,11 @@ class TodoAdapter(
             tvTodoTitle.text = currentTodo.title
             cbDone.isChecked = currentTodo.isChecked
             toggleStrikeThrough(tvTodoTitle, currentTodo.isChecked)
+
+            tvPriorityIndicator.setBackgroundColor(
+                getPriorityColor(currentTodo.priority, itemView)
+            )
+
             cbDone.setOnCheckedChangeListener { _, isChecked ->
                 toggleStrikeThrough(tvTodoTitle, isChecked)
                 currentTodo.isChecked = !currentTodo.isChecked

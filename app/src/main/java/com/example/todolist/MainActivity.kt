@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var todoAdapter: TodoAdapter
     private lateinit var switchThemeButton: Button
+    private lateinit var prioritySpinner: Spinner
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +29,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         switchThemeButton = findViewById(R.id.switchThemeButton)
+        prioritySpinner = findViewById(R.id.spPriority)
+
+        // Initialize Spinner for priorities
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.priority_levels,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            prioritySpinner.adapter = adapter
+        }
 
         // Updating a theme using SharedPreferences
         val sharedPreferences = getSharedPreferences("settings", MODE_PRIVATE)
@@ -58,8 +72,10 @@ class MainActivity : AppCompatActivity() {
         bAddTODO.setOnClickListener {
             val etTODOTitle = findViewById<EditText>(R.id.etTODOTitle)
             val todoTitle = etTODOTitle.text.toString()
+            val selectedPriority = prioritySpinner.selectedItem.toString()
+
             if(todoTitle.isNotEmpty()) {
-                val todo = Todo(todoTitle)
+                val todo = Todo(todoTitle, selectedPriority)
                 todoAdapter.addTodo(todo)
                 etTODOTitle.text.clear()
             }
