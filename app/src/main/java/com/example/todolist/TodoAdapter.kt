@@ -109,4 +109,12 @@ class TodoAdapter(
         notifyDataSetChanged()
     }
 
+    fun onItemMove(fromPosition: Int, toPosition: Int) {
+        if (fromPosition != toPosition) {
+            val item = todos.removeAt(fromPosition)
+            todos.add(toPosition, item)
+            notifyItemMoved(fromPosition, toPosition)
+        }
+    }
+
 }

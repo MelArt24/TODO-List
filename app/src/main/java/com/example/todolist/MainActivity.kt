@@ -17,6 +17,9 @@ import com.google.gson.reflect.TypeToken
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 
+import androidx.recyclerview.widget.ItemTouchHelper
+
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var todoAdapter: TodoAdapter
@@ -67,6 +70,10 @@ class MainActivity : AppCompatActivity() {
         val rvTODOItems = findViewById<RecyclerView>(R.id.rvTODOItems)
         rvTODOItems.adapter = todoAdapter
         rvTODOItems.layoutManager = LinearLayoutManager(this)
+
+        // Allows you to enable the ability to drag and drop items in the RecyclerView
+        val itemTouchHelper = ItemTouchHelper(TodoItemTouchHelper(todoAdapter))
+        itemTouchHelper.attachToRecyclerView(rvTODOItems)
 
         val bAddTODO = findViewById<Button>(R.id.bAddTODO)
         bAddTODO.setOnClickListener {
