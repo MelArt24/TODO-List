@@ -2,22 +2,27 @@ package com.example.todolist
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.ArrayAdapter
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+
+//import android.widget.Button
+//import android.widget.EditText
+//import android.widget.Spinner
+//import android.widget.ArrayAdapter
+import android.widget.*
+
+//import androidx.appcompat.app.AppCompatActivity
+//import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.*
+
+//import androidx.recyclerview.widget.LinearLayoutManager
+//import androidx.recyclerview.widget.RecyclerView
+//import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.*
 
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatDelegate
-
-import androidx.recyclerview.widget.ItemTouchHelper
 
 
 class MainActivity : AppCompatActivity() {
