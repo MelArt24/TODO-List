@@ -10,7 +10,7 @@
         android:id="@+id/tvTodoTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Example"
+        android:text="@string/example"
         android:textSize="24sp"
         android:gravity="center_vertical"
         android:minHeight="80dp"
