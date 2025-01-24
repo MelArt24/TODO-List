@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.app.AlertDialog
 import android.widget.EditText
+import android.widget.Toast
 
 // TodoAdapter gets a list of tasks (todos) and inherits from
 // RecyclerView.Adapter, which provides the connection between
@@ -109,6 +110,9 @@ class TodoAdapter(
                         if (updatedTitle.isNotBlank()) {
                             currentTodo.title = updatedTitle
                             notifyItemChanged(position) // Updating an item in a list
+                        } else {
+                            // Show a message if the input is empty
+                            Toast.makeText(context, "The task title cannot be empty!", Toast.LENGTH_LONG).show()
                         }
                     }
                     .setNegativeButton("Cancel", null)
