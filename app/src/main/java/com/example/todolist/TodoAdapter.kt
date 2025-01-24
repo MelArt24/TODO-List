@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
+import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AlertDialog
+import android.widget.EditText
 
 // TodoAdapter gets a list of tasks (todos) and inherits from
 // RecyclerView.Adapter, which provides the connection between
@@ -23,6 +26,7 @@ class TodoAdapter(
         val tvTodoTitle: TextView = itemView.findViewById(R.id.tvTodoTitle)
         val cbDone: CheckBox = itemView.findViewById(R.id.cbDone)
         val tvPriorityIndicator: TextView = itemView.findViewById(R.id.tvPriorityIndicator)
+        val btnEdit: ImageButton = itemView.findViewById(R.id.btnEdit)
     }
 
     // The method creates new views for the list, but this only happens
@@ -87,6 +91,28 @@ class TodoAdapter(
             cbDone.setOnCheckedChangeListener { _, isChecked ->
                 toggleStrikeThrough(tvTodoTitle, isChecked)
                 currentTodo.isChecked = !currentTodo.isChecked
+            }
+
+            btnEdit.setOnClickListener {
+                // Create an editing dialog
+                val context = it.context
+                val editText = EditText(context).apply {
+                    setText(currentTodo.title)
+                    hint = "Edit task"
+                }
+
+                AlertDialog.Builder(context)
+                    .setTitle("Edit Task")
+                    .setView(editText)
+                    .setPositiveButton("Save") { _, _ ->
+                        val updatedTitle = editText.text.toString()
+                        if (updatedTitle.isNotBlank()) {
+                            currentTodo.title = updatedTitle
+                            notifyItemChanged(position) // Updating an item in a list
+                        }
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
             }
         }
     }

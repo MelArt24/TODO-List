@@ -34,6 +34,18 @@
         app:layout_constraintTop_toTopOf="@id/tvTodoTitle"
         app:layout_constraintBottom_toBottomOf="@id/tvTodoTitle" />
 
+    <ImageButton
+        android:id="@+id/btnEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_edit"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintEnd_toStartOf="@+id/cbDone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp" />
+
+
     <CheckBox
         android:id="@+id/cbDone"
         android:layout_width="wrap_content"

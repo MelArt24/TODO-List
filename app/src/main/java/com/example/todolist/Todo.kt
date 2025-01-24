@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Todo(
-    val title: String,                  // saves the task text
+    var title: String,                  // saves the task text
     val priority: String = "Low",       // shows priority of task
     var isChecked: Boolean = false      // indicates whether the task is completed
 ) : Parcelable
